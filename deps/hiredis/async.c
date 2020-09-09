@@ -57,15 +57,15 @@ static unsigned int callbackHash(const void *key) {
                                hi_sdslen((const hisds)key));
 }
 
-static void *callbackValDup(void *privdata, const void *src) {
+static void* callbackValDup(void* privdata, const void* src) {
     ((void) privdata);
-    redisCallback *dup;
+    redisCallback* dup;
 
     dup = hi_malloc(sizeof(*dup));
     if (dup == NULL)
         return NULL;
 
-    memcpy(dup,src,sizeof(*dup));
+    memcpy(dup, src, sizeof(*dup));
     return dup;
 }
 

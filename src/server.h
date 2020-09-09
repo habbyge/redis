@@ -502,7 +502,7 @@ struct redisObject;
  * to serialize and deserialize the value in the RDB file, rewrite the AOF
  * log, create the digest for "DEBUG DIGEST", and free the value when a key
  * is deleted. */
-typedef void *(*moduleTypeLoadFunc)(struct RedisModuleIO *io, int encver);
+typedef void* (*moduleTypeLoadFunc) (struct RedisModuleIO* io, int encver);
 typedef void (*moduleTypeSaveFunc)(struct RedisModuleIO *io, void *value);
 typedef int (*moduleTypeAuxLoadFunc)(struct RedisModuleIO *rdb, int encver, int when);
 typedef void (*moduleTypeAuxSaveFunc)(struct RedisModuleIO *rdb, int when);
@@ -520,7 +520,7 @@ typedef void (*RedisModuleUserChangedFunc) (uint64_t client_id, void *privdata);
  * the methods and links to the module exporting the type. */
 typedef struct RedisModuleType {
     uint64_t id; /* Higher 54 bits of type ID + 10 lower bits of encoding ver. */
-    struct RedisModule *module;
+    struct RedisModule* module;
     moduleTypeLoadFunc rdb_load;
     moduleTypeSaveFunc rdb_save;
     moduleTypeRewriteFunc aof_rewrite;
@@ -549,8 +549,8 @@ typedef struct RedisModuleType {
  *  }
  */
 typedef struct moduleValue {
-    moduleType *type;
-    void *value;
+    moduleType* type;
+    void* value;
 } moduleValue;
 
 /* This is a wrapper for the 'rio' streams used inside rdb.c in Redis, so that
@@ -768,9 +768,9 @@ typedef struct {
      * a NULL pointer, with all the sub commands that can be executed for
      * this command. When no subcommands matching is used, the field is just
      * set to NULL to avoid allocating USER_COMMAND_BITS_COUNT pointers. */
-    sds **allowed_subcommands;
-    list *passwords; /* A list of SDS valid passwords for this user. */
-    list *patterns;  /* A list of allowed key patterns. If this field is NULL
+    sds** allowed_subcommands;
+    list* passwords; /* A list of SDS valid passwords for this user. */
+    list* patterns;  /* A list of allowed key patterns. If this field is NULL
                         the user cannot mention any key in a command, unless
                         the flag ALLKEYS is set in the user. */
 } user;

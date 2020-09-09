@@ -83,7 +83,7 @@ struct bio_job {
     void *arg1, *arg2, *arg3;
 };
 
-void *bioProcessBackgroundJobs(void *arg);
+void* bioProcessBackgroundJobs(void* arg);
 void lazyfreeFreeObjectFromBioThread(robj *o);
 void lazyfreeFreeDatabaseFromBioThread(dict *ht1, dict *ht2);
 void lazyfreeFreeSlotsMapFromBioThread(rax *rt);
@@ -142,8 +142,8 @@ void bioCreateBackgroundJob(int type, void *arg1, void *arg2, void *arg3) {
     pthread_mutex_unlock(&bio_mutex[type]);
 }
 
-void *bioProcessBackgroundJobs(void *arg) {
-    struct bio_job *job;
+void* bioProcessBackgroundJobs(void* arg) {
+    struct bio_job* job;
     unsigned long type = (unsigned long) arg;
     sigset_t sigset;
 
@@ -183,7 +183,7 @@ void *bioProcessBackgroundJobs(void *arg) {
             "Warning: can't mask SIGALRM in bio.c thread: %s", strerror(errno));
 
     while(1) {
-        listNode *ln;
+        listNode* ln;
 
         /* The loop always starts with the lock hold. */
         if (listLength(bio_jobs[type]) == 0) {

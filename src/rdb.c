@@ -49,17 +49,18 @@
 
 char* rdbFileBeingLoaded = NULL; /* used for rdb checking on read error */
 extern int rdbCheckMode;
-void rdbCheckError(const char *fmt, ...);
-void rdbCheckSetError(const char *fmt, ...);
+void rdbCheckError(const char* fmt, ...);
+void rdbCheckSetError(const char* fmt, ...);
 
-void rdbReportError(int corruption_error, int linenum, char *reason, ...) {
+void rdbReportError(int corruption_error, int linenum, char* reason, ...) {
     va_list ap;
     char msg[1024];
     int len;
 
     len = snprintf(msg,sizeof(msg),
         "Internal error in RDB reading offset %llu, function at rdb.c:%d -> ",
-        (unsigned long long)server.loading_loaded_bytes, linenum);
+        (unsigned long long) server.loading_loaded_bytes, linenum);
+
     va_start(ap,reason);
     vsnprintf(msg+len,sizeof(msg)-len,reason,ap);
     va_end(ap);
@@ -95,7 +96,9 @@ int rdbSaveType(rio *rdb, unsigned char type) {
  * "types" like the end-of-file type, the EXPIRE type, and so forth. */
 int rdbLoadType(rio *rdb) {
     unsigned char type;
-    if (rioRead(rdb,&type,1) == 0) return -1;
+    if (rioRead(rdb,&type,1) == 0) {
+        return -1;
+    }
     return type;
 }
 

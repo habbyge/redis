@@ -34,8 +34,10 @@ uint16_t minutes_diff(uint16_t now, uint16_t prev) {
  * less likely is that the counter is really incremented.
  * The maximum value of the counter is saturated at 255. */
 uint8_t log_incr(uint8_t counter) {
-    if (counter == 255) return counter;
-    double r = (double)rand()/RAND_MAX;
+    if (counter == 255) {
+        return counter;
+    }
+    double r = (double) rand() / RAND_MAX;
     double baseval = counter-COUNTER_INIT_VAL;
     if (baseval < 0) baseval = 0;
     double limit = 1.0/(baseval*10+1);
@@ -52,9 +54,7 @@ void access_entry(struct entry *e) {
 /* Return the entry LFU value and as a side effect decrement the
  * entry value if the decrement time was reached. */
 uint8_t scan_entry(struct entry *e) {
-    if (minutes_diff(to_16bit_minutes(time(NULL)),e->decrtime)
-        >= decr_every)
-    {
+    if (minutes_diff(to_16bit_minutes(time(NULL)),e->decrtime) >= decr_every) {
         if (e->counter) {
             if (e->counter > COUNTER_INIT_VAL*2) {
                 e->counter /= 2;

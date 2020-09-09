@@ -168,7 +168,7 @@ sds ACLHashPassword(unsigned char *cleartext, size_t len) {
 
 /* Given a hash and the hash length, returns C_OK if it is a valid password 
  * hash, or C_ERR otherwise. */
-int ACLCheckPasswordHash(unsigned char *hash, int hashlen) {
+int ACLCheckPasswordHash(unsigned char* hash, int hashlen) {
     if (hashlen != HASH_PASSWORD_LEN) {
         return C_ERR;      
     }
@@ -233,9 +233,11 @@ void *ACLListDupSds(void *item) {
  * the structure representing the user.
  *
  * If the user with such name already exists NULL is returned. */
-user *ACLCreateUser(const char *name, size_t namelen) {
-    if (raxFind(Users,(unsigned char*)name,namelen) != raxNotFound) return NULL;
-    user *u = zmalloc(sizeof(*u));
+user* ACLCreateUser(const char* name, size_t namelen) {
+    if (raxFind(Users,(unsigned char*)name,namelen) != raxNotFound) {
+        return NULL;
+    }
+    user* u = zmalloc(sizeof(*u));
     u->name = sdsnewlen(name,namelen);
     u->flags = USER_FLAG_DISABLED;
     u->allowed_subcommands = NULL;
@@ -256,14 +258,14 @@ user *ACLCreateUser(const char *name, size_t namelen) {
  * we can use in order to validate ACL rules or for other similar reasons.
  * The user will not get linked to the Users radix tree. The returned
  * user should be released with ACLFreeUser() as usually. */
-user *ACLCreateUnlinkedUser(void) {
+user* ACLCreateUnlinkedUser(void) {
     char username[64];
     for (int j = 0; ; j++) {
-        snprintf(username,sizeof(username),"__fakeuser:%d__",j);
-        user *fakeuser = ACLCreateUser(username,strlen(username));
-        if (fakeuser == NULL) continue;
-        int retval = raxRemove(Users,(unsigned char*) username,
-                               strlen(username),NULL);
+        snprintf(username,sizeof(username), "__fakeuser:%d__", j);
+        user* fakeuser = ACLCreateUser(username, strlen(username));
+        if (fakeuser == NULL) 
+            continue;
+        int retval = raxRemove(Users, (unsigned char*) username, strlen(username), NULL);
         serverAssert(retval != 0);
         return fakeuser;
     }
@@ -271,7 +273,7 @@ user *ACLCreateUnlinkedUser(void) {
 
 /* Release the memory used by the user structure. Note that this function
  * will not remove the user from the Users global radix tree. */
-void ACLFreeUser(user *u) {
+void ACLFreeUser(user* u) {
     sdsfree(u->name);
     listRelease(u->passwords);
     listRelease(u->patterns);
